@@ -16,6 +16,7 @@ struct Article: Identifiable, Equatable{
     let publishedAt: Date
     let author: String?
     let category: Category
+    var isRead: Bool = false
     
     var ratings: [Int]
     

@@ -12,6 +12,7 @@ struct ArticleCardView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
+            
             AsyncImage(url: article.image_url) { image in
                 image
                     .resizable()
@@ -21,6 +22,13 @@ struct ArticleCardView: View {
             }
             .frame(width: 100, height: 110)
             .cornerRadius(5)
+            .overlay (alignment: .topLeading){
+                if !article.isRead {
+                    Circle()
+                            .fill(Color.blue)
+                            .frame(width: 20, height: 20)
+                }
+            }
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(article.category.text)

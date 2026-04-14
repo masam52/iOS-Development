@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ArticlesListView: View {
-    let articles: [Article]
+    @State var articles: [Article]
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 10) {
-                    ForEach(articles) { article in
-                        NavigationLink(destination: ArticleDetailView(article: article)) {
+                    ForEach($articles) { $article in
+                        NavigationLink(destination: ArticleDetailView(article: $article)) {
                             ArticleCardView(article: article)}
                                 .buttonStyle(.plain)
                     }

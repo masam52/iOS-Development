@@ -7,17 +7,22 @@
 
 import SwiftUI
 
+enum Tab {
+    case novosti, igrice
+}
+
 struct ContentView: View {
+    @State private var selectedTab: Tab = .novosti
+    
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             ArticlesListView(articles: Article.mockArticles)
-                .tabItem{
-                    Label("Novosti", systemImage: "newspaper")
-                }
-            Text("Igrice")
-                .tabItem{
-                    Label("Igrice", systemImage: "gamecontroller")
-                }
+                .tabItem { Label("Novosti", systemImage: "newspaper") }
+                .tag(Tab.novosti)
+            
+            WordleView()
+                .tabItem { Label("Igrice", systemImage: "gamecontroller") }
+                .tag(Tab.igrice)
         }
     }
 }

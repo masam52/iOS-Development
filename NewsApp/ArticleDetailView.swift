@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ArticleDetailView: View {
-    let article: Article
+    @Binding var article: Article
     
     var body: some View {
         ScrollView {
@@ -57,11 +57,15 @@ struct ArticleDetailView: View {
                         .foregroundStyle(.primary)
                 }
                 .padding(.horizontal, 16)
+                
+                .onAppear() {
+                    article.isRead = true
+                }
             }
         }
     }
 }
 
 #Preview {
-    ArticleDetailView(article: Article.mockArticles[1])
+    ArticleDetailView(article: .constant(Article.mockArticles[0]))
 }
