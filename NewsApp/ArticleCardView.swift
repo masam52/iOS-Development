@@ -23,16 +23,16 @@ struct ArticleCardView: View {
             .cornerRadius(5)
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(categoryText(article.category))
+                Text(article.category.text)
                     .font(.caption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(categoryColor(article.category).opacity(0.4))
+                    .background(article.category.color.opacity(0.4))
                     .foregroundStyle(.gray)
                     .cornerRadius(5)
 
                 Text(article.title)
-                    .foregroundStyle(categoryColor(article.category))
+                    .foregroundStyle(article.category.color)
                     .font(.headline)
                     .bold()
 
@@ -48,48 +48,11 @@ struct ArticleCardView: View {
         .cornerRadius(12)
         .shadow(radius: 3)
     }
-
-    func categoryText(_ category: Category) -> String {
-        switch category {
-        case .Sport(let sub):
-            if let sub = sub {
-                return "Sport - \(sub)"
-            } else {
-                return "Sport"
-            }
-
-        case .Lifestyle(let sub):
-            if let sub = sub {
-                return "Lifestyle - \(sub)"
-            } else {
-                return "Lifestyle"
-            }
-
-        case .Svijet(let sub):
-            if let sub = sub {
-                return "Svijet - \(sub)"
-            } else {
-                return "Svijet"
-            }
-        }
-    }
-    
-    func categoryColor(_ category: Category) -> Color {
-        switch category {
-        case .Sport(_):
-            return .green
-        case .Lifestyle(_):
-            return .orange
-        case .Svijet(_):
-            return .red
-        }
-    }
 }
-
 
 #Preview {
     ArticleCardView(
-        article:mockArticles[1]
+        article: Article.mockArticles[1]
     )
 }
 

@@ -24,5 +24,5 @@ struct ArticlesListView: View {
 }
 
 #Preview {
-    ArticlesListView(articles: mockArticles)
+    ArticlesListView(articles: Article.mockArticles)
 }
