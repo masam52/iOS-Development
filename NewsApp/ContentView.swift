@@ -9,10 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
+        TabView {
             ArticlesListView(articles: Article.mockArticles)
+                .tabItem{
+                    Label("Novosti", systemImage: "newspaper")
+                }
+            Text("Igrice")
+                .tabItem{
+                    Label("Igrice", systemImage: "gamecontroller")
+                }
         }
-        .padding()
     }
 }
 

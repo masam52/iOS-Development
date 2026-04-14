@@ -11,14 +11,18 @@ struct ArticlesListView: View {
     let articles: [Article]
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 10) {
-                ForEach(articles) { article in
-                    ArticleCardView(article: article)
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 10) {
+                    ForEach(articles) { article in
+                        NavigationLink(destination: ArticleDetailView(article: article)) {
+                            ArticleCardView(article: article)}
+                                .buttonStyle(.plain)
+                    }
                 }
+                .padding(.horizontal, 10)
+                .padding(.top, 10)
             }
-            .padding(.horizontal, 10)
-            .padding(.top, 10)
         }
     }
 }
