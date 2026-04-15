@@ -16,21 +16,32 @@ extension String {
 }
 
 struct WordleView: View {
-    let mockAttempts = ["kotač", "ormar", "mačka"]
-    @State private var currentInput: String = ""
+    static let words = ["kotac", "bolid", "felga", "okvir", "volan", "staza", "zavoj", "ekipa", "ispuh", "snaga"]
+    
+    @State var attempts: [String] = []
+    @State var currentInput: String = ""
+    @State var solution: String = WordleView.words.randomElement()!
+    @State var isOver: Bool = false
     
     var body: some View {
         VStack {
             ScrollView {
-                AttemptsListView(attempts: mockAttempts)
+                AttemptsListView(attempts: attempts, solution: solution)
                     .padding()
             }
             
             HStack {
                 TextField("Pogodi...", text: $currentInput)
                     .autocorrectionDisabled()
-                Button("Pošalji") { }
+                Button("Pošalji") {
+                    attempts.append(currentInput.lowercased())
+                    if currentInput.lowercased() == solution.lowercased(){
+                        isOver = true
+                    }
+                    currentInput = ""
+                }
                     .foregroundStyle(.blue)
+                    .disabled(currentInput.count != 5)
             }
             .padding()
         }
@@ -39,11 +50,12 @@ struct WordleView: View {
 
 struct AttemptsListView: View {
     let attempts: [String]
+    let solution: String
     
     var body: some View {
         VStack(spacing: 8) {
             ForEach(attempts.indices, id: \.self) { index in
-                AttemptRowView(word: attempts[index])
+                AttemptRowView(word: attempts[index], solution: solution)
             }
         }
     }
@@ -51,6 +63,19 @@ struct AttemptsListView: View {
 
 struct AttemptRowView: View {
     let word: String
+    let solution: String
+    
+    func color(at index: Int) -> Color {
+            let letter = word[index].lowercased()
+            let solutionLetter = solution[index].lowercased()
+            
+            if letter == solutionLetter {
+                return .green
+            } else if solution.lowercased().contains(letter) {
+                return .yellow
+            }
+            return Color(.systemGray2)
+        }
     
     var body: some View {
         HStack(spacing: 8) {
@@ -59,7 +84,7 @@ struct AttemptRowView: View {
                     .font(.title)
                     .bold()
                     .frame(width: 65, height: 65)
-                    .background(Color(.systemGray4))
+                    .background(color(at: index))
                     .cornerRadius(3)
             }
         }
