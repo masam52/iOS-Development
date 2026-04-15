@@ -61,6 +61,7 @@ struct ArticleDetailView: View {
                 .onAppear() {
                     article.isRead = true
                 }
+                .toolbar(.hidden, for: .tabBar)
             }
         }
     }

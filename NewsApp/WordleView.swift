@@ -27,6 +27,7 @@ struct WordleView: View {
         VStack {
             ScrollView {
                 AttemptsListView(attempts: attempts, solution: solution)
+                showCurrentRow(input: $currentInput)
                     .padding()
             }
             
@@ -89,6 +90,34 @@ struct AttemptRowView: View {
             }
         }
     }
+}
+
+struct showCurrentRow: View {
+    @Binding var input: String
+    
+    var body: some View {
+        HStack(spacing: 8){
+            ForEach(0..<5, id: \.self) { index in
+                ZStack {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(.gray.opacity(0.4))
+                        .frame(width: 65, height: 65)
+                    
+                    if index < input.count {
+                        Text(String(input[index]))
+                            .font(.title)
+                            .bold()
+                    }
+                }
+                .onTapGesture {
+                    if index < input.count {
+                        input.remove(at: input.index(input.startIndex, offsetBy: index))
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 #Preview {
