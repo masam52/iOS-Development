@@ -40,9 +40,34 @@ struct ArticlesListView: View {
                         .padding(.horizontal, 10)
                         .padding(.top, 10)
                     }
+                    .refreshable {
+                        do {
+                            let fetched = try await NewsService.shared.fetchArticles()
+                            let readIds = ReadArticlesService.shared.getReadIds()
+                            articles = fetched.map { article in
+                                var updated = article
+                                updated.isRead = readIds.contains(article.id)
+                                return updated
+                            }
+                            state = .success(articles)
+                            CacheService.shared.save(articles)
+                        } catch {
+                        }
+                    }
                 }
             }
             .task {
+                //ucitava cache
+                if let cached = CacheService.shared.load() {
+                    let readIds = ReadArticlesService.shared.getReadIds()
+                    articles = cached.map { article in
+                        var updated = article
+                        updated.isRead = readIds.contains(article.id)
+                        return updated
+                    }
+                    state = .success(articles) // prikaži cache odmah
+                }
+                //ucitava api
                 do {
                     let fetched = try await NewsService.shared.fetchArticles()
                     let readIds = ReadArticlesService.shared.getReadIds()
@@ -51,10 +76,13 @@ struct ArticlesListView: View {
                         updated.isRead = readIds.contains(article.id)
                         return updated
                     }
-                            
+                    state = .success(articles)
+                    CacheService.shared.save(articles)
                     state = .success(articles)
                 } catch {
-                    state = .error("Greška pri učitavanju vijesti.")
+                    if articles.isEmpty {
+                        state = .error("Greška pri učitavanju vijesti.")
+                    }
                 }
             }
         }

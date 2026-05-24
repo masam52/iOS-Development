@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Article: Identifiable, Equatable{
+struct Article: Identifiable, Equatable, Codable{
     let id : String
     let title: String
     let description: String
@@ -104,21 +104,21 @@ struct Article: Identifiable, Equatable{
     
     
 }
-enum Category: Equatable{
+enum Category: Equatable, Codable{
     case Sport(SportSubcategory?)
     case Lifestyle(LifestyleSubcategory?)
     case Svijet(SvijetSubcategory?)
 }
     
-enum SportSubcategory: Equatable{
+enum SportSubcategory: Equatable, Codable{
     case Nogomet, Tenis, Košarka, Rukomet, F1
 }
 
-enum LifestyleSubcategory: Equatable{
+enum LifestyleSubcategory: Equatable, Codable{
     case Kultura, Putovanja, Kuhanje
 }
 
-enum SvijetSubcategory: Equatable{
+enum SvijetSubcategory: Equatable, Codable{
     case Politika, Ekonomija, Znanost
 }
 
