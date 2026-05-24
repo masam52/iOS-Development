@@ -38,6 +38,24 @@ class AuthService {
         token = nil
         username = nil
     }
+    
+    func fetchWordleWord() async throws -> String {
+        guard let token = token else { throw URLError(.userAuthenticationRequired) }
+        
+        let url = URL(string: "https://ios-vjestina.flabbergast.com/word")!
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let response = try JSONDecoder().decode(WordResponse.self, from: data)
+        
+        return response.word
+    }
+
+    struct WordResponse: Codable {
+        let word: String
+    }
 }
 
 struct LoginResponse: Codable {

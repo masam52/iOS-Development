@@ -16,35 +16,60 @@ extension String {
 }
 
 struct WordleView: View {
-    static let words = ["kotac", "bolid", "felga", "okvir", "volan", "staza", "zavoj", "ekipa", "ispuh", "snaga"]
+    static let words = ["kotac", "bolid", "felga", "okvir", "volan",
+                        "staza", "zavoj", "ekipa", "ispuh", "snaga"]
+    
+    @Environment(AuthService.self) var authService
     
     @State var attempts: [String] = []
     @State var currentInput: String = ""
     @State var solution: String = WordleView.words.randomElement()!
     @State var isOver: Bool = false
+    @State var isLoadingWord: Bool = true
     
     var body: some View {
         VStack {
-            ScrollView {
-                AttemptsListView(attempts: attempts, solution: solution)
-                showCurrentRow(input: $currentInput)
-                    .padding()
-            }
-            
-            HStack {
-                TextField("Pogodi...", text: $currentInput)
-                    .autocorrectionDisabled()
-                Button("Pošalji") {
-                    attempts.append(currentInput.lowercased())
-                    if currentInput.lowercased() == solution.lowercased(){
-                        isOver = true
-                    }
-                    currentInput = ""
+            if isLoadingWord {
+                ProgressView("Učitavanje riječi...")
+            } else {
+                ScrollView {
+                    AttemptsListView(attempts: attempts, solution: solution)
+                    showCurrentRow(input: $currentInput)
+                        .padding()
                 }
+                
+                HStack {
+                    TextField("Pogodi...", text: $currentInput)
+                        .autocorrectionDisabled()
+                    Button("Pošalji") {
+                        attempts.append(currentInput.lowercased())
+                        if currentInput.lowercased() == solution.lowercased() {
+                            isOver = true
+                        }
+                        currentInput = ""
+                    }
                     .foregroundStyle(.blue)
                     .disabled(currentInput.count != 5)
+                }
+                .padding()
             }
-            .padding()
+        }
+        .alert("Čestitke!", isPresented: $isOver) {
+            Button("Nova igra") {
+                attempts = []
+                solution = WordleView.words.randomElement()!
+                isOver = false
+            }
+        } message: {
+            Text("Pogodio si današnju riječ!")
+        }
+        .task {
+            do {
+                solution = try await authService.fetchWordleWord()
+            } catch {
+                solution = WordleView.words.randomElement()!
+            }
+            isLoadingWord = false
         }
     }
 }
