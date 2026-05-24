@@ -12,18 +12,24 @@ enum Tab {
 }
 
 struct ContentView: View {
+    @Environment(AuthService.self) var authService
     @State private var selectedTab: Tab = .novosti
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            ArticlesListView()
-                .tabItem { Label("Novosti", systemImage: "newspaper") }
-                .tag(Tab.novosti)
-            
-            WordleView()
-                .tabItem { Label("Igrice", systemImage: "gamecontroller") }
-                .tag(Tab.igrice)
+        if authService.isLoggedIn {
+            TabView(selection: $selectedTab) {
+                ArticlesListView()
+                    .tabItem { Label("Novosti", systemImage: "newspaper") }
+                    .tag(Tab.novosti)
+                
+                WordleView()
+                    .tabItem { Label("Igrice", systemImage: "gamecontroller") }
+                    .tag(Tab.igrice)
+            }
+        } else {
+            LoginView()
         }
+        
     }
 }
 

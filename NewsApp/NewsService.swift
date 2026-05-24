@@ -18,13 +18,12 @@ class NewsService {
         let (data, _) = try await URLSession.shared.data(from: url)
         let response = try JSONDecoder().decode(NewsAPIResponse.self, from: data)
         
-        //i dalje izbacuje srpske clanke iako je language: croatian
-            response.results.forEach { dto in
-                print("Jezik: \(dto.language ?? "nil") | Naslov: \(dto.title)")
-            }
-        
+            //i dalje izbacuje srpske clanke iako je language: croatian
+                response.results.forEach { dto in
+                    print("Jezik: \(dto.language ?? "nil") | Naslov: \(dto.title)")
+                }
+            
         return response.results
-            .filter { $0.language == "croatian" }
             .compactMap { dto in Article(from: dto) }
     }
 }
