@@ -45,8 +45,14 @@ struct ArticlesListView: View {
             .task {
                 do {
                     let fetched = try await NewsService.shared.fetchArticles()
-                    articles = fetched
-                    state = .success(fetched)
+                    let readIds = ReadArticlesService.shared.getReadIds()
+                    articles = fetched.map { article in
+                        var updated = article
+                        updated.isRead = readIds.contains(article.id)
+                        return updated
+                    }
+                            
+                    state = .success(articles)
                 } catch {
                     state = .error("Greška pri učitavanju vijesti.")
                 }

@@ -60,6 +60,7 @@ struct ArticleDetailView: View {
                 
                 .onAppear() {
                     article.isRead = true
+                    ReadArticlesService.shared.markAsRead(article.id)
                 }
                 .toolbar(.hidden, for: .tabBar)
             }
