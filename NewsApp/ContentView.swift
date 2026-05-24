@@ -16,7 +16,7 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            ArticlesListView(articles: Article.mockArticles)
+            ArticlesListView()
                 .tabItem { Label("Novosti", systemImage: "newspaper") }
                 .tag(Tab.novosti)
             

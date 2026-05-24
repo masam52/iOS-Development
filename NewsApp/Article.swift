@@ -149,3 +149,18 @@ extension Category {
     }
 }
 
+extension Article {
+    init?(from dto: ArticleDTO) {
+        guard let description = dto.description else { return nil }
+        
+        self.title = dto.title
+        self.description = description
+        self.content = description
+        self.image_url = URL(string: dto.image_url ?? "") ?? URL(string: "https://placehold.co/400")!
+        self.publishedAt = Date()
+        self.author = dto.creator?.first
+        self.category = .Svijet(nil)
+        self.ratings = []
+        self.isRead = false
+    }
+}
