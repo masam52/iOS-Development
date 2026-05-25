@@ -19,7 +19,7 @@ class CacheService {
             .appendingPathComponent(fileName)
     }
     
-    // sprema listu članaka na disk
+    //sprema listu clanaka 
     func save(_ articles: [Article]) {
         if let data = try? JSONEncoder().encode(articles) {
             try? data.write(to: fileURL)

@@ -57,7 +57,6 @@ struct ArticlesListView: View {
                 }
             }
             .task {
-                //ucitava cache
                 if let cached = CacheService.shared.load() {
                     let readIds = ReadArticlesService.shared.getReadIds()
                     articles = cached.map { article in
@@ -65,9 +64,8 @@ struct ArticlesListView: View {
                         updated.isRead = readIds.contains(article.id)
                         return updated
                     }
-                    state = .success(articles) // prikaži cache odmah
+                    state = .success(articles) 
                 }
-                //ucitava api
                 do {
                     let fetched = try await NewsService.shared.fetchArticles()
                     let readIds = ReadArticlesService.shared.getReadIds()

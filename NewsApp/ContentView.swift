@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum Tab {
-    case novosti, igrice
+    case novosti, igrice, prognoza
 }
 
 struct ContentView: View {
@@ -22,6 +22,10 @@ struct ContentView: View {
                     .tabItem { Label("Novosti", systemImage: "newspaper") }
                     .tag(Tab.novosti)
                 
+                WeatherView()
+                    .tabItem { Label("Prognoza", systemImage: "cloud.sun.fill") }
+                    .tag(Tab.prognoza)
+                
                 WordleView()
                     .tabItem { Label("Igrice", systemImage: "gamecontroller") }
                     .tag(Tab.igrice)
@@ -29,7 +33,6 @@ struct ContentView: View {
         } else {
             LoginView()
         }
-        
     }
 }
 

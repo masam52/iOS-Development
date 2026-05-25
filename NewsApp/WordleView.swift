@@ -90,18 +90,23 @@ struct AttemptsListView: View {
 struct AttemptRowView: View {
     let word: String
     let solution: String
+    @State private var revealedIndices: Set<Int> = []
     
     func color(at index: Int) -> Color {
-            let letter = word[index].lowercased()
-            let solutionLetter = solution[index].lowercased()
-            
-            if letter == solutionLetter {
-                return .green
-            } else if solution.lowercased().contains(letter) {
-                return .yellow
-            }
+        guard revealedIndices.contains(index) else {
             return Color(.systemGray2)
         }
+        
+        let letter = word[index].lowercased()
+        let solutionLetter = solution[index].lowercased()
+        
+        if letter == solutionLetter {
+            return .green
+        } else if solution.lowercased().contains(letter) {
+            return .yellow
+        }
+        return Color(.systemGray2)
+    }
     
     var body: some View {
         HStack(spacing: 8) {
@@ -112,6 +117,13 @@ struct AttemptRowView: View {
                     .frame(width: 65, height: 65)
                     .background(color(at: index))
                     .cornerRadius(3)
+                    .animation(.easeInOut(duration: 0.3), value: revealedIndices)
+            }
+        }
+        .task {
+            for index in 0..<5 {
+                try? await Task.sleep(nanoseconds: 300_000_000)
+                revealedIndices.insert(index)
             }
         }
     }
